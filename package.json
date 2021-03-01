@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "test": "NODE_ENV=test DB_STORAGE=test.sqlite JWT_SECRET=test PORT=3200 mocha tests/index.spec.js --exit",
+    "posttest": "rm -rf test.sqlite"
   },
   "dependencies": {
     "amqplib": "^0.7.0",
@@ -22,7 +24,13 @@
     "node-cron": "^2.0.3",
     "sequelize": "^6.5.0",
     "sqlite3": "^5.0.2",
+    "swagger-ui-express": "^4.1.6",
     "uuid": "^8.3.2",
     "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "chai": "^4.3.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.3.0"
   }
 }

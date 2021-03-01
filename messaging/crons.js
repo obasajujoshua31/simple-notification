@@ -5,6 +5,11 @@ require("dotenv").config();
 
 function startCronTasks() {
   console.log("Cron task is starting in the background");
+
+  if (process.env.NODE_ENV === "test") {
+    return;
+  }
+
   scheduleJob(function () {
     consumeMessages(
       newRequestCreatedTopic,

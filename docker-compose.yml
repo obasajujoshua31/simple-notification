@@ -1,16 +1,27 @@
-version: '3'
+version: "3"
 services:
-  # app:
-  #   container_name: app
-  #   restart: always
-  #   build: .
-  #   ports:
-  #     - '4000:4000'
-  #   external_links:
-  #     - rabbitmq
   rabbitmq:
     container_name: rabbitmq-server
     image: rabbitmq:3.8.9
     ports:
-      - '15672:15672'
-      - '5672:5672'
+      - "15672:15672"
+      - "5672:5672"
+
+  app:
+    container_name: app
+    env_file: .env
+    build: .
+    restart: on-failure
+    command: "ls"
+    
+    ports:
+      - "5190:5190"
+    volumes:
+      - "./db.sqlite:/app/db.sqlite"
+      - "./server.log:/app/server.log"
+      - "./error.log:/app/error.log"
+    depends_on:
+      - rabbitmq
+    command: sh -c  "./wait-for.sh rabbitmq:5672 --  node app.js"
+
+ 

@@ -1,4 +1,3 @@
-const { REQUEST_STATUS } = require("../api/constants");
 const { publishMessage } = require("../messaging/publisher");
 const {
   newRequestCreatedTopic,
@@ -63,8 +62,6 @@ request.belongsTo(User, {
 });
 
 request.afterCreate((req, opts) => {
-  // TODO publish to new-request-created topic
-
   publishMessage(req.toJSON(), newRequestCreatedTopic);
 });
 
