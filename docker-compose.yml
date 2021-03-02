@@ -12,7 +12,6 @@ services:
     env_file: .env
     build: .
     restart: on-failure
-    command: "ls"
     
     ports:
       - "5190:5190"

@@ -18,6 +18,8 @@ const { checkAuth, verifyUser } = require("./middlewares/authenticate");
 const {
   findRequestByParamID,
   checkRequestStatus,
+  checkCustomerRequestPrividge,
+  checkRiderRequestPrividge,
 } = require("./middlewares/request");
 const { REQUEST_STATUS } = require("./constants");
 
@@ -41,6 +43,7 @@ router
   .delete(
     verifyUser,
     findRequestByParamID,
+    checkCustomerRequestPrividge,
     checkRequestStatus(
       [REQUEST_STATUS.pending, REQUEST_STATUS.accepted],
       "can only cancel pending or accepted request"
@@ -53,6 +56,7 @@ router.put(
   verifyUser,
   checkAuth("rider"),
   findRequestByParamID,
+  checkRiderRequestPrividge,
   checkRequestStatus(
     [REQUEST_STATUS.started],
     "only started rides can be completed"
@@ -77,6 +81,7 @@ router.put(
   verifyUser,
   checkAuth("rider"),
   findRequestByParamID,
+  checkRiderRequestPrividge,
   checkRequestStatus(
     [REQUEST_STATUS.accepted],
     "can only arrived for accepted request"
@@ -89,6 +94,7 @@ router.put(
   verifyUser,
   checkAuth("rider"),
   findRequestByParamID,
+  checkRiderRequestPrividge,
   checkRequestStatus(
     [REQUEST_STATUS.arrived],
     "can only start arrived request"

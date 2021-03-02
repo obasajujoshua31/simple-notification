@@ -2,7 +2,12 @@ const request = require("../../models/request");
 const Request = require("../../models/request");
 const User = require("../../models/user");
 const logger = require("../../pkg/logger");
-const { INTERNALSERVERERROR, NOTFOUND, NOTACCEPTED } = require("../constants");
+const {
+  INTERNALSERVERERROR,
+  NOTFOUND,
+  NOTACCEPTED,
+  FORBIDDEN,
+} = require("../constants");
 
 module.exports.findRequestByParamID = async (req, res, next) => {
   try {
@@ -43,6 +48,22 @@ module.exports.checkRequestStatus = (statusAllowed, errorMessage) => (
 ) => {
   if (!statusAllowed.includes(req.request.status)) {
     return res.status(NOTACCEPTED).send(errorMessage);
+  }
+
+  return next();
+};
+
+module.exports.checkCustomerRequestPrividge = (req, res, next) => {
+  if (req.request.customerId !== req.user.id) {
+    return res.sendStatus(FORBIDDEN);
+  }
+
+  return next();
+};
+
+module.exports.checkRiderRequestPrividge = (req, res, next) => {
+  if (req.request.riderId !== req.user.id) {
+    return res.sendStatus(FORBIDDEN);
   }
 
   return next();

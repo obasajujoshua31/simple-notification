@@ -1,0 +1,491 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple notification service API",
+    "version": "1.0.0",
+    "title": "Simple Notification API",
+    "contact": {
+      "email": "obasajujoshua31@gmail.com"
+    }
+  },
+  "host": "localhost:5190",
+  "tags": [
+    {
+      "name": "riders",
+      "description": "Operations available to only riders"
+    },
+    {
+      "name": "customers",
+      "description": "Operations available to customers"
+    },
+    {
+      "name": "both",
+      "description": "Operations Available to both customers and riders"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "both"
+        ],
+        "summary": "create account for both riders and customers",
+        "description": "create a new rider or customer",
+        "operationId": "register",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "signupPayload",
+            "description": "User account to create",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/signupPayload"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "account created"
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "both"
+        ],
+        "summary": "log in for both riders and customers",
+        "description": "login for a rider or customer",
+        "operationId": "login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "signupPayload",
+            "description": "User account to login",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/signinPayload"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "login successfully"
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          }
+        }
+      }
+    },
+    "/requests": {
+      "post": {
+        "tags": [
+          "customers"
+        ],
+        "summary": "create a rider request",
+        "description": "create a rider request",
+        "operationId": "createRiderRequest",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "requestPayload",
+            "description": "rider request",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/riderRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "rider request created"
+          },
+          "400": {
+            "description": "invalid input, object invalid"
+          },
+          "401": {
+            "description": "not authenticated"
+          },
+          "403": {
+            "description": "action is not allowed"
+          }
+        }
+      }
+    },
+    "/request/{id}": {
+      "get": {
+        "tags": [
+          "all"
+        ],
+        "summary": "get a request",
+        "description": "get a request",
+        "operationId": "getRequest",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "request id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "rider request retrived"
+          },
+          "401": {
+            "description": "not authenticated"
+          },
+          "404": {
+            "description": "request not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "all"
+        ],
+        "summary": "cancel a rider request",
+        "description": "cancel a rider request",
+        "operationId": "cancelRequest",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "request id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "rider request cancelled"
+          },
+          "401": {
+            "description": "not authenticated"
+          },
+          "403": {
+            "description": "action is not allowed"
+          },
+          "404": {
+            "description": "request not found"
+          }
+        }
+      }
+    },
+    "/request/{id}/complete": {
+      "put": {
+        "tags": [
+          "riders"
+        ],
+        "summary": "complete a request",
+        "description": "complete a ride request",
+        "operationId": "completeRequest",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "request id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "rider request completed"
+          },
+          "401": {
+            "description": "not authenticated"
+          },
+          "403": {
+            "description": "action is not allowed"
+          },
+          "404": {
+            "description": "request not found"
+          }
+        }
+      }
+    },
+    "/request/{id}/accept": {
+      "put": {
+        "tags": [
+          "riders"
+        ],
+        "summary": "accept a request",
+        "description": "accept a ride request",
+        "operationId": "acceptRequest",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "request id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "rider request accepted"
+          },
+          "401": {
+            "description": "not authenticated"
+          },
+          "403": {
+            "description": "action is not allowed"
+          },
+          "404": {
+            "description": "request not found"
+          }
+        }
+      }
+    },
+    "/request/{id}/arrived": {
+      "put": {
+        "tags": [
+          "riders"
+        ],
+        "summary": "rider has arrived",
+        "description": "handle rider has arrived",
+        "operationId": "arrivedRider",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "request id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "rider arrived at pickup"
+          },
+          "401": {
+            "description": "not authenticated"
+          },
+          "403": {
+            "description": "action is not allowed"
+          },
+          "404": {
+            "description": "request not found"
+          }
+        }
+      }
+    },
+    "/request/{id}/start": {
+      "put": {
+        "tags": [
+          "riders"
+        ],
+        "summary": "ride has started",
+        "description": "ride has been started",
+        "operationId": "startRide",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Bearer Token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "request id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ride has started"
+          },
+          "401": {
+            "description": "not authenticated"
+          },
+          "403": {
+            "description": "action is not allowed"
+          },
+          "404": {
+            "description": "request not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "riderRequest": {
+      "type": "object",
+      "required": [
+        "destination",
+        "pickUpAddress"
+      ],
+      "properties": {
+        "pickUpAddress": {
+          "type": "string",
+          "example": "24 Bodmas Street, VI"
+        },
+        "destination": {
+          "type": "string",
+          "example": "54 Queens Boulevard, Nowhere"
+        }
+      }
+    },
+    "signupPayload": {
+      "type": "object",
+      "required": [
+        "accountType",
+        "email",
+        "firstName",
+        "lastName",
+        "password",
+        "phoneNumber"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "johndoe@gmail.com"
+        },
+        "password": {
+          "type": "password"
+        },
+        "accountType": {
+          "type": "string",
+          "example": "customer/rider"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "example": "123456789"
+        }
+      }
+    },
+    "signinPayload": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "johndoe@gmail.com"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

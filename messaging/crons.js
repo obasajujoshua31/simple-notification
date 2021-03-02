@@ -18,7 +18,7 @@ function startCronTasks() {
   });
 
   scheduleJob(function () {
-    consumeMessages(statusToTopic.accepted, "Your request was accepted");
+    consumeMessages(statusToTopic.accepted, "Your request was accepted!");
   });
 
   scheduleJob(function () {
@@ -39,7 +39,7 @@ function startCronTasks() {
   scheduleJob(function () {
     consumeMessages(
       statusToTopic.completed,
-      "Please rate your driver, ride completed"
+      "Please rate your driver, ride completed!"
     );
   });
 }

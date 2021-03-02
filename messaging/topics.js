@@ -1,4 +1,3 @@
-const { REQUEST_STATUS } = require("../api/constants");
 module.exports.newRequestCreatedTopic = "new-request-created";
 module.exports.statusToTopic = {
   accepted: "request-accepted",
